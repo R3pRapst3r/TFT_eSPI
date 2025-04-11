@@ -1,33 +1,21 @@
-/***************************************************
-  Arduino TFT graphics library targeted at 32-bit
-  processors such as ESP32, ESP8266 and STM32.
+/****************************************************
+  Arduino TFT graphics library targeted at RP2040 and
+  RP2350 based boards.
 
   This is a stand-alone library that contains the
   hardware driver, the graphics functions and the
   proportional fonts.
 
-  The larger fonts are Run Length Encoded to reduce their
-  size.
+  The built-in fonts 4, 6, 7 and 8 are Run Length
+  Encoded (RLE) to reduce the FLASH footprint.
 
-  Created by Bodmer 2/12/16
-  Last update by Bodmer 20/03/20
+  Last review/edit by Bodmer: 04/02/22
+  Last modified by reprapster: 04/11/25
  ****************************************************/
 
 #include "TFT_eSPI.h"
 
-#if defined (ESP32)
-  #if defined(CONFIG_IDF_TARGET_ESP32S3)
-    #include "Processors/TFT_eSPI_ESP32_S3.c" // Tested with SPI and 8-bit parallel
-  #elif defined(CONFIG_IDF_TARGET_ESP32C3)
-    #include "Processors/TFT_eSPI_ESP32_C3.c" // Tested with SPI (8-bit parallel will probably work too!)
-  #else
-    #include "Processors/TFT_eSPI_ESP32.c"
-  #endif
-#elif defined (ARDUINO_ARCH_ESP8266)
-  #include "Processors/TFT_eSPI_ESP8266.c"
-#elif defined (STM32) // (_VARIANT_ARDUINO_STM32_) stm32_def.h
-  #include "Processors/TFT_eSPI_STM32.c"
-#elif defined (ARDUINO_ARCH_RP2040)  || defined (ARDUINO_ARCH_MBED) // Raspberry Pi Pico
+#if defined (ARDUINO_ARCH_RP2040)  || defined (ARDUINO_ARCH_MBED)
   #include "Processors/TFT_eSPI_RP2040.c"
 #else
   #include "Processors/TFT_eSPI_Generic.c"
@@ -632,13 +620,6 @@ void TFT_eSPI::init(uint8_t tc)
     sclkpinmask = (uint32_t) digitalPinToBitMask(TFT_SCLK);
   #endif
 
-  #if defined (TFT_SPI_OVERLAP) && defined (ARDUINO_ARCH_ESP8266)
-    // Overlap mode SD0=MISO, SD1=MOSI, CLK=SCLK must use D3 as CS
-    //    pins(int8_t sck, int8_t miso, int8_t mosi, int8_t ss);
-    //spi.pins(        6,          7,           8,          0);
-    spi.pins(6, 7, 8, 0);
-  #endif
-
   spi.begin(); // This will set HMISO to input
 
 #else
@@ -656,38 +637,12 @@ void TFT_eSPI::init(uint8_t tc)
 
     INIT_TFT_DATA_BUS;
 
-
-#if defined (TFT_CS) && !defined(RP2040_PIO_INTERFACE)
-  // Set to output once again in case MISO is used for CS
-  if (TFT_CS >= 0) {
-    pinMode(TFT_CS, OUTPUT);
-    digitalWrite(TFT_CS, HIGH); // Chip select high (inactive)
-  }
-#elif defined (ARDUINO_ARCH_ESP8266) && !defined (TFT_PARALLEL_8_BIT) && !defined (RP2040_PIO_SPI)
-  spi.setHwCs(1); // Use hardware SS toggling
-#endif
-
-
-  // Set to output once again in case MISO is used for DC
-#if defined (TFT_DC) && !defined(RP2040_PIO_INTERFACE)
-  if (TFT_DC >= 0) {
-    pinMode(TFT_DC, OUTPUT);
-    digitalWrite(TFT_DC, HIGH); // Data/Command high = data mode
-  }
-#endif
-
     _booted = false;
     end_tft_write();
   } // end of: if just _booted
 
   // Toggle RST low to reset
 #ifdef TFT_RST
-  #if !defined(RP2040_PIO_INTERFACE)
-    // Set to output once again in case MISO is used for TFT_RST
-    if (TFT_RST >= 0) {
-      pinMode(TFT_RST, OUTPUT);
-    }
-  #endif
   if (TFT_RST >= 0) {
     writecommand(0x00); // Put SPI bus in known state for TFT with CS tied low
     digitalWrite(TFT_RST, HIGH);
@@ -4905,25 +4860,6 @@ uint32_t TFT_eSPI::alphaBlend24(uint8_t alpha, uint32_t fgc, uint32_t bgc, uint8
   return (rxx & 0xFF0000) | (xgx & 0x00FF00) | (xxb & 0x0000FF);
 }
 
-/***************************************************************************************
-** Function name:           write
-** Description:             draw characters piped through serial stream
-***************************************************************************************/
-/* // Not all processors support buffered write
-#ifndef ARDUINO_ARCH_ESP8266 // Avoid ESP8266 board package bug
-size_t TFT_eSPI::write(const uint8_t *buf, size_t len)
-{
-  inTransaction = true;
-
-  uint8_t *lbuf = (uint8_t *)buf;
-  while(*lbuf !=0 && len--) write(*lbuf++);
-
-  inTransaction = lockTransaction;
-  end_tft_write();
-  return 1;
-}
-#endif
-*/
 /***************************************************************************************
 ** Function name:           write
 ** Description:             draw characters piped through serial stream

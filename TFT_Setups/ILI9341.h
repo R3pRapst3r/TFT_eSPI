@@ -3,8 +3,8 @@
 #define ILI9341_DRIVER
 
 // ST7796 resolution
-#define TFT_WIDTH   320      
-#define TFT_HEIGHT  480
+#define TFT_WIDTH   240      
+#define TFT_HEIGHT  320
 
 // Enable PIO SPI
 #define RP2040_PIO_SPI              // Use PIO to emulate SPI
