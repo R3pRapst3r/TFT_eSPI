@@ -10,7 +10,7 @@
   Encoded (RLE) to reduce the FLASH footprint.
 
   Last review/edit by Bodmer: 04/02/22
-  Last modified by reprapster: 04/11/25
+  Last modified by R3pRapst3r: 04/11/25
  ****************************************************/
 #ifndef _TFT_eSPIH_
 #define _TFT_eSPIH_
