@@ -2,8 +2,6 @@
 // This is the command sequence that initialises the ST7796 driver
 //
 // This setup information uses simple 8-bit SPI writecommand() and writedata() functions
-//
-// See ST7735_Setup.h file for an alternative format
 
 #define TFT_INIT_DELAY 0
 {

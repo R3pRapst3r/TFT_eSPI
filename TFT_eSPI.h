@@ -1,6 +1,6 @@
-/***************************************************
-  Arduino TFT graphics library targeted at ESP8266
-  and ESP32 based boards.
+/****************************************************
+  Arduino TFT graphics library targeted at RP2040 and
+  RP2350 based boards.
 
   This is a stand-alone library that contains the
   hardware driver, the graphics functions and the
@@ -10,9 +10,8 @@
   Encoded (RLE) to reduce the FLASH footprint.
 
   Last review/edit by Bodmer: 04/02/22
+  Last modified by reprapster: 04/11/25
  ****************************************************/
-
-// Stop fonts etc. being loaded multiple times
 #ifndef _TFT_eSPIH_
 #define _TFT_eSPIH_
 
@@ -35,19 +34,6 @@
 /***************************************************************************************
 **                         Section 2: Load library and processor specific header files
 ***************************************************************************************/
-// Include header file that defines the fonts loaded, the TFT drivers
-// available and the pins to be used, etc. etc.
-#ifdef CONFIG_TFT_eSPI_ESPIDF
-  #include "TFT_config.h"
-#endif
-
-// New ESP8266 board package uses ARDUINO_ARCH_ESP8266
-// old package defined ESP8266
-#if defined (ESP8266)
-  #ifndef ARDUINO_ARCH_ESP8266
-    #define ARDUINO_ARCH_ESP8266
-  #endif
-#endif
 
 // The following lines allow the user setup to be included in the sketch folder, see
 // "Sketch_with_tft_setup" generic example.
@@ -66,7 +52,7 @@
   #endif
 #endif
 
-#include <User_Setup_Select.h>
+#include <Setup_Select.h>
 
 // Handle FLASH based storage e.g. PROGMEM
 #if defined(ARDUINO_ARCH_RP2040)
@@ -82,10 +68,6 @@
     typeof(addr) _addr = (addr); \
     *(const unsigned long *)(_addr); \
   })
-#elif defined(__AVR__)
-  #include <avr/pgmspace.h>
-#elif defined(ARDUINO_ARCH_ESP8266) || defined(ESP32)
-  #include <pgmspace.h>
 #else
   #ifndef PROGMEM
     #define PROGMEM
@@ -93,17 +75,7 @@
 #endif
 
 // Include the processor specific drivers
-#if defined(CONFIG_IDF_TARGET_ESP32S3)
-  #include "Processors/TFT_eSPI_ESP32_S3.h"
-#elif defined(CONFIG_IDF_TARGET_ESP32C3)
-  #include "Processors/TFT_eSPI_ESP32_C3.h"
-#elif defined (ESP32)
-  #include "Processors/TFT_eSPI_ESP32.h"
-#elif defined (ARDUINO_ARCH_ESP8266)
-  #include "Processors/TFT_eSPI_ESP8266.h"
-#elif defined (STM32)
-  #include "Processors/TFT_eSPI_STM32.h"
-#elif defined(ARDUINO_ARCH_RP2040)
+if defined(ARDUINO_ARCH_RP2040)
   #include "Processors/TFT_eSPI_RP2040.h"
 #else
   #include "Processors/TFT_eSPI_Generic.h"
@@ -406,14 +378,8 @@ int8_t pin_tft_d5;
 int8_t pin_tft_d6;
 int8_t pin_tft_d7;
 
-int8_t pin_tft_led;
-int8_t pin_tft_led_on;
-
-int8_t pin_tch_cs;   // Touch chip select pin
-
 int16_t tft_spi_freq;// TFT write SPI frequency
 int16_t tft_rd_freq; // TFT read  SPI frequency
-int16_t tch_spi_freq;// Touch controller read/write SPI frequency
 } setup_t;
 
 /***************************************************************************************
@@ -432,7 +398,6 @@ class TFT_eSPI : public Print { friend class TFT_eSprite; // Sprite class has ac
   TFT_eSPI(int16_t _W = TFT_WIDTH, int16_t _H = TFT_HEIGHT);
 
   // init() and begin() are equivalent, begin() included for backwards compatibility
-  // Sketch defined tab colour option is for ST7735 displays only
   void     init(uint8_t tc = TAB_COLOUR), begin(uint8_t tc = TAB_COLOUR);
 
   // These are virtual so the TFT_eSprite class can override them with sprite specific functions
@@ -959,21 +924,6 @@ class TFT_eSPI : public Print { friend class TFT_eSprite; // Sprite class has ac
 /***************************************************************************************
 **                         Section 9: TFT_eSPI class conditional extensions
 ***************************************************************************************/
-// Load the Touch extension
-#ifdef TOUCH_CS
-  #if defined (TFT_PARALLEL_8_BIT) || defined (RP2040_PIO_INTERFACE)
-    #if !defined(DISABLE_ALL_LIBRARY_WARNINGS)
-      #error >>>>------>> Touch functions not supported in 8/16-bit parallel mode or with RP2040 PIO.
-    #endif
-  #else
-    #include "Extensions/Touch.h"        // Loaded if TOUCH_CS is defined by user
-  #endif
-#else
-    #if !defined(DISABLE_ALL_LIBRARY_WARNINGS)
-      #warning >>>>------>> TOUCH_CS pin not defined, TFT_eSPI touch functions will not be available!
-    #endif
-#endif
-
 // Load the Anti-aliased font extension
 #ifdef SMOOTH_FONT
   #include "Extensions/Smooth_font.h"  // Loaded if SMOOTH_FONT is defined by user

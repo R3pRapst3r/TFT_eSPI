@@ -2,9 +2,6 @@
 // This is the command sequence that initialises the ILI9488 driver
 //
 // This setup information uses simple 8-bit SPI writecommand() and writedata() functions
-//
-// See ST7735_Setup.h file for an alternative format
-
 
 // Configure ILI9488 display
 

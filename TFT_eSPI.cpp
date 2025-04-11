@@ -711,63 +711,14 @@ void TFT_eSPI::init(uint8_t tc)
 #if   defined (ILI9341_DRIVER) || defined(ILI9341_2_DRIVER) || defined (ILI9342_DRIVER)
     #include "TFT_Drivers/ILI9341_Init.h"
 
-#elif defined (ST7735_DRIVER)
-    tabcolor = tc;
-    #include "TFT_Drivers/ST7735_Init.h"
-
-#elif defined (ILI9163_DRIVER)
-    #include "TFT_Drivers/ILI9163_Init.h"
-
-#elif defined (S6D02A1_DRIVER)
-    #include "TFT_Drivers/S6D02A1_Init.h"
-
-#elif defined (ST7796_DRIVER)
-    #include "TFT_Drivers/ST7796_Init.h"
-
-#elif defined (ILI9486_DRIVER)
-    #include "TFT_Drivers/ILI9486_Init.h"
-
-#elif defined (ILI9481_DRIVER)
-    #include "TFT_Drivers/ILI9481_Init.h"
-
 #elif defined (ILI9488_DRIVER)
     #include "TFT_Drivers/ILI9488_Init.h"
-
-#elif defined (HX8357D_DRIVER)
-    #include "TFT_Drivers/HX8357D_Init.h"
 
 #elif defined (ST7789_DRIVER)
     #include "TFT_Drivers/ST7789_Init.h"
 
-#elif defined (R61581_DRIVER)
-    #include "TFT_Drivers/R61581_Init.h"
-
-#elif defined (RM68140_DRIVER)
-	#include "TFT_Drivers/RM68140_Init.h"
-
-#elif defined (ST7789_2_DRIVER)
-    #include "TFT_Drivers/ST7789_2_Init.h"
-
-#elif defined (SSD1351_DRIVER)
-    #include "TFT_Drivers/SSD1351_Init.h"
-
-#elif defined (SSD1963_DRIVER)
-    #include "TFT_Drivers/SSD1963_Init.h"
-
-#elif defined (GC9A01_DRIVER)
-     #include "TFT_Drivers/GC9A01_Init.h"
-
-#elif defined (ILI9225_DRIVER)
-     #include "TFT_Drivers/ILI9225_Init.h"
-
-#elif defined (RM68120_DRIVER)
-     #include "TFT_Drivers/RM68120_Init.h"
-
-#elif defined (HX8357B_DRIVER)
-    #include "TFT_Drivers/HX8357B_Init.h"
-
-#elif defined (HX8357C_DRIVER)
-    #include "TFT_Drivers/HX8357C_Init.h"
+#elif defined (ST7796_DRIVER)
+    #include "TFT_Drivers/ST7796_Init.h"
 
 #endif
 
@@ -780,23 +731,7 @@ void TFT_eSPI::init(uint8_t tc)
 #endif
 
   end_tft_write();
-
   setRotation(rotation);
-
-#if defined (TFT_BL) && defined (TFT_BACKLIGHT_ON)
-  if (TFT_BL >= 0) {
-    pinMode(TFT_BL, OUTPUT);
-    digitalWrite(TFT_BL, TFT_BACKLIGHT_ON);
-  }
-#else
-  #if defined (TFT_BL) && defined (M5STACK)
-    // Turn on the back-light LED
-    if (TFT_BL >= 0) {
-      pinMode(TFT_BL, OUTPUT);
-      digitalWrite(TFT_BL, HIGH);
-    }
-  #endif
-#endif
 }
 
 
@@ -813,62 +748,14 @@ void TFT_eSPI::setRotation(uint8_t m)
 #if   defined (ILI9341_DRIVER) || defined(ILI9341_2_DRIVER) || defined (ILI9342_DRIVER)
     #include "TFT_Drivers/ILI9341_Rotation.h"
 
-#elif defined (ST7735_DRIVER)
-    #include "TFT_Drivers/ST7735_Rotation.h"
-
-#elif defined (ILI9163_DRIVER)
-    #include "TFT_Drivers/ILI9163_Rotation.h"
-
-#elif defined (S6D02A1_DRIVER)
-    #include "TFT_Drivers/S6D02A1_Rotation.h"
-
-#elif defined (ST7796_DRIVER)
-    #include "TFT_Drivers/ST7796_Rotation.h"
-
-#elif defined (ILI9486_DRIVER)
-    #include "TFT_Drivers/ILI9486_Rotation.h"
-
-#elif defined (ILI9481_DRIVER)
-    #include "TFT_Drivers/ILI9481_Rotation.h"
-
 #elif defined (ILI9488_DRIVER)
     #include "TFT_Drivers/ILI9488_Rotation.h"
-
-#elif defined (HX8357D_DRIVER)
-    #include "TFT_Drivers/HX8357D_Rotation.h"
 
 #elif defined (ST7789_DRIVER)
     #include "TFT_Drivers/ST7789_Rotation.h"
 
-#elif defined (R61581_DRIVER)
-    #include "TFT_Drivers/R61581_Rotation.h"
-
-#elif defined (RM68140_DRIVER)
-	#include "TFT_Drivers/RM68140_Rotation.h"
-
-#elif defined (ST7789_2_DRIVER)
-    #include "TFT_Drivers/ST7789_2_Rotation.h"
-
-#elif defined (SSD1351_DRIVER)
-    #include "TFT_Drivers/SSD1351_Rotation.h"
-
-#elif defined (SSD1963_DRIVER)
-    #include "TFT_Drivers/SSD1963_Rotation.h"
-
-#elif defined (GC9A01_DRIVER)
-     #include "TFT_Drivers/GC9A01_Rotation.h"
-
-#elif defined (ILI9225_DRIVER)
-     #include "TFT_Drivers/ILI9225_Rotation.h"
-
-#elif defined (RM68120_DRIVER)
-     #include "TFT_Drivers/RM68120_Rotation.h"
-
-#elif defined (HX8357B_DRIVER)
-    #include "TFT_Drivers/HX8357B_Rotation.h"
-
-#elif defined (HX8357C_DRIVER)
-    #include "TFT_Drivers/HX8357C_Rotation.h"
+#elif defined (ST7796_DRIVER)
+    #include "TFT_Drivers/ST7796_Rotation.h"
 
 #endif
 
@@ -1216,13 +1103,6 @@ uint16_t TFT_eSPI::readPixel(int32_t x0, int32_t y0)
     #if defined (ST7796_DRIVER)
       // Read the 2 bytes
       color = ((tft_Read_8()) << 8) | (tft_Read_8());
-    #elif defined (ST7735_DRIVER)
-      // Read the 3 RGB bytes, colour is in LS 6 bits of the top 7 bits of each byte
-      // as the TFT stores colours as 18 bits
-      uint8_t r = tft_Read_8()<<1;
-      uint8_t g = tft_Read_8()<<1;
-      uint8_t b = tft_Read_8()<<1;
-      color = color565(r, g, b);
     #else
       // Read the 3 RGB bytes, colour is actually only in the top 6 bits of each byte
       // as the TFT stores colours as 18 bits
@@ -1383,13 +1263,6 @@ void TFT_eSPI::readRect(int32_t x, int32_t y, int32_t w, int32_t h, uint16_t *da
     #if defined (ST7796_DRIVER)
       // Read the 2 bytes
       color = ((tft_Read_8()) << 8) | (tft_Read_8());
-    #elif defined (ST7735_DRIVER)
-      // Read the 3 RGB bytes, colour is in LS 6 bits of the top 7 bits of each byte
-      // as the TFT stores colours as 18 bits
-      uint8_t r = tft_Read_8()<<1;
-      uint8_t g = tft_Read_8()<<1;
-      uint8_t b = tft_Read_8()<<1;
-      color = color565(r, g, b);
     #else
       // Read the 3 RGB bytes, colour is actually only in the top 6 bits of each byte
       // as the TFT stores colours as 18 bits
@@ -6119,32 +5992,11 @@ void TFT_eSPI::getSetup(setup_t &tft_settings)
   tft_settings.pin_tft_d6 = -1;
   tft_settings.pin_tft_d7 = -1;
 #endif
-
-#if defined (TFT_BL)
-  tft_settings.pin_tft_led = TFT_BL;
-#endif
-
-#if defined (TFT_BACKLIGHT_ON)
-  tft_settings.pin_tft_led_on = TFT_BACKLIGHT_ON;
-#endif
-
-#if defined (TOUCH_CS)
-  tft_settings.pin_tch_cs   = TOUCH_CS;
-  tft_settings.tch_spi_freq = SPI_TOUCH_FREQUENCY/100000;
-#else
-  tft_settings.pin_tch_cs   = -1;
-  tft_settings.tch_spi_freq = 0;
-#endif
 }
 
 
 ////////////////////////////////////////////////////////////////////////////////////////
-#ifdef TOUCH_CS
-  #include "Extensions/Touch.cpp"
-#endif
-
 #include "Extensions/Button.cpp"
-
 #include "Extensions/Sprite.cpp"
 
 #ifdef SMOOTH_FONT
